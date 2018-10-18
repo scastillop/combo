@@ -15,8 +15,10 @@ class CreatePaymentSalesTable extends Migration
     {
         Schema::create('payment_sales', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('payment_method_id')->unsigned()->after('id');
-            $table->foreign('payment_method_id')->references('id')->on('payment_method');
+            $table->integer('payment_method_id')->unsigned();
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
+            $table->integer('sale_id')->unsigned();
+            $table->foreign('sale_id')->references('id')->on('sales');
             $table->string('transaction_code');
             $table->decimal('paid_amount', 8, 2);
             $table->enum('status', ['pending', 'done', 'rejected']);
