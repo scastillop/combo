@@ -16,3 +16,9 @@ Route::get('/', function () {
 });
 
 Route::resource('sales', 'SaleController');
+Route::resource('promos', 'PromoController');
+Route::resource('customers', 'CustomerController');
+Route::resource('families', 'FamilyController');
+Route::resource('products', 'ProductController');
+Route::resource('providers', 'ProviderController');
+Route::resource('purchase_orders', 'PurchaseOrderController');

@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    //
-    public static function prueba(){
-return "prueba";
-    }
+    protected $table = 'sales';
+
+    public static function getSales(){
+        $sales = \DB::table('sales')->get();
+        return $sales;
+     }
 }

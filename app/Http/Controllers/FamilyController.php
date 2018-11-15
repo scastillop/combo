@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\promo_details;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
-class PromoDetailsController extends Controller
+class FamilyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,16 +35,19 @@ class PromoDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'name' => "unique:families,name,{$familyId}"
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\promo_details  $promo_details
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(promo_details $promo_details)
+    public function show($id)
     {
         //
     }
@@ -52,10 +55,10 @@ class PromoDetailsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\promo_details  $promo_details
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(promo_details $promo_details)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +67,10 @@ class PromoDetailsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\promo_details  $promo_details
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, promo_details $promo_details)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +78,10 @@ class PromoDetailsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\promo_details  $promo_details
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(promo_details $promo_details)
+    public function destroy($id)
     {
         //
     }

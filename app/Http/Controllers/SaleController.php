@@ -14,7 +14,8 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        $sales = Sale::getSales();
+        return view('sales/index', ['sales' => $sales]);
     }
 
     /**
@@ -35,7 +36,12 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'customer_id' => 'required|integer',
+            'payment_method_id' => 'required|integer',
+            "products"    => "required|array|min:1",
+            "products.*"  => "integer|min:1"
+        ]);
     }
 
     /**

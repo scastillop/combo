@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\promos;
 use Illuminate\Http\Request;
 
-class PromosController extends Controller
+class PromoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +13,8 @@ class PromosController extends Controller
      */
     public function index()
     {
-        //
+        echo "promos-index";
+        echo url()->current();
     }
 
     /**
@@ -41,21 +41,22 @@ class PromosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\promos  $promos
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(promos $promos)
+    public function show($id)
     {
-        //
+        echo "promos-show";
+        echo url()->current();
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\promos  $promos
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(promos $promos)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +65,10 @@ class PromosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\promos  $promos
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, promos $promos)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +76,10 @@ class PromosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\promos  $promos
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(promos $promos)
+    public function destroy($id)
     {
         //
     }
