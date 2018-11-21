@@ -20,14 +20,15 @@ class Product extends Model
 
     // funcion para guardar un producto
     public static function saveProduct(Product $product){
-    	$product->save();
+    	$product->code=0;
+        $product->save();
         $product->generateCode();
     	return $product;
     }
 
     // funcion para generar el codigo de un producto
     public function generateCode(){
-        $this->code = (string)$this->family_id + (string)$this->id + Str::substr($this->name, 0, 3);
+        $this->code = (string)sprintf("%04d", $this->family_id).(string)sprintf("%04d", $this->id).substr($this->name, 0, 5);
         $this->save();
     }
 }
