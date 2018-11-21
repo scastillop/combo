@@ -35,7 +35,10 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'business_name' => 'required|string',
+            'address' => 'required|string'
+        ]);
     }
 
     /**

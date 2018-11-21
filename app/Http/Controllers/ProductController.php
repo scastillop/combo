@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\PaymentSale;
 use Illuminate\Http\Request;
 
-class PaymentSaleController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,16 +34,26 @@ class PaymentSaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'stock' => 'required|integer',
+            'available' => 'required|boolean',
+            'family_id' => 'required|integer',
+            Rule::exists('family')->where(function ($query) {
+                $query->where('id', $request->family_id);
+            }),
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            //validar que no puede existir el mismo nombre de un producto de la misma familia
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\PaymentSale  $paymentSale
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(PaymentSale $paymentSale)
+    public function show($id)
     {
         //
     }
@@ -52,10 +61,10 @@ class PaymentSaleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PaymentSale  $paymentSale
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(PaymentSale $paymentSale)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +73,10 @@ class PaymentSaleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PaymentSale  $paymentSale
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PaymentSale $paymentSale)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +84,10 @@ class PaymentSaleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PaymentSale  $paymentSale
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PaymentSale $paymentSale)
+    public function destroy($id)
     {
         //
     }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\products;
 use Illuminate\Http\Request;
 
-class ProductsController extends Controller
+class PurchaseOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,16 +34,20 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'provider_id' => 'required|integer',
+            "purchase_order_details"    => "required|array|min:1",
+            "purchase_order_details.*"  => "integer|min:1"
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\products  $products
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(products $products)
+    public function show($id)
     {
         //
     }
@@ -52,10 +55,10 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\products  $products
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(products $products)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +67,10 @@ class ProductsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\products  $products
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, products $products)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +78,10 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\products  $products
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(products $products)
+    public function destroy($id)
     {
         //
     }
