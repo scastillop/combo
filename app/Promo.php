@@ -9,13 +9,12 @@ class Promo extends Model
 	protected $table = 'promos';
 
 	//funcion para traer todos los productos menos vendidos en un rango de fecha pero que al menos tengan 1 venta
-	public static function getMostSelledProducts($date_from, $date_to){
+	public static function getMostSelledProducts(string $date_from, string $date_to){
 		$response = \DB::table('sales')
 						->leftJoin('sale_details', 'sales.id', '=', 'sale_details.sale_id')
 						->whereBetween('sales.created_at', array($date_from, $date_to))
-						->select('sale_details.product_code')
-						->select('sale_details.* AS total_selled')->count()
-						->group('sale_details.product_code')
+						->select(\DB::raw('count(`sale_details`.`product_code`) as total_selled, `sale_details`.`product_code`'))
+						->groupBy('sale_details.product_code')
 						->orderBy('total_selled', 'asc')
 						->limit(10)
 						->get();
@@ -34,6 +33,9 @@ class Promo extends Model
 		    $promo_detail->product_code = $product->code;
 		    $promo_detail->product_name = $product->name;
 		    $promo_detail->product_price = $product->price;
+		    $promo_detail->product_discount = $promo->total_discount;
+		    $product->stock--;
+		    $product->save();
 		    $promo_detail->save();
 		}
 	}
