@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Promo;
 
 class PromoController extends Controller
 {
@@ -13,8 +14,8 @@ class PromoController extends Controller
      */
     public function index()
     {
-        echo "promos-index";
-        echo url()->current();
+        $promos = Promo::getMostSelledProducts("2018-10-01 00:00:00", "2018-11-31 00:00:00");
+        return view('promos/index', ['promos' => $promos]);
     }
 
     /**
@@ -35,7 +36,8 @@ class PromoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validar fecha inicio mayor a la de termino
+        //validar que el valor sea menor al total de la suma de los productos
     }
 
     /**

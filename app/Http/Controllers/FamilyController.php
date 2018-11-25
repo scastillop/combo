@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Family;
+use Validator;
+use Session;
+use Redirect;
 
 class FamilyController extends Controller
 {
@@ -14,7 +18,8 @@ class FamilyController extends Controller
      */
     public function index()
     {
-        //
+        $families = Family::all();
+        return view('families/index', ['families' => $families]);
     }
 
     /**
@@ -24,7 +29,7 @@ class FamilyController extends Controller
      */
     public function create()
     {
-        //
+        return view('families.create');
     }
 
     /**
@@ -35,10 +40,23 @@ class FamilyController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'name' => "unique:families,name,{$familyId}"
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|unique:families',
         ]);
+
+        if ($validator->fails()) {
+            return redirect('families/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        // store
+        $family              = new Family;
+        $family->name        = $request['name'];
+        $family->description = $request['description'];
+        $family->save();
+        // redirect
+        Session::flash('success', 'Familia creada correctamente');
+        return Redirect::to('families');
     }
 
     /**
@@ -60,7 +78,8 @@ class FamilyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $family = Family::find($id);
+        return view('families/edit', ['family' => $family, 'id' => $id]);
     }
 
     /**
@@ -72,7 +91,26 @@ class FamilyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|unique:families',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('families/'. $id .'/edit')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        // store
+        $family              = Family::find($id);
+        $family->name        = $request['name'];
+        $family->description = $request['description'];
+        $family->save();
+
+        // redirect
+        Session::flash('success', 'Familia modificada correctamente');
+        return Redirect::to('families');
+        
     }
 
     /**

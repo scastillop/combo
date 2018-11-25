@@ -13,7 +13,8 @@ class PurchaseOrderController extends Controller
      */
     public function index()
     {
-        //
+        $purchases = [];
+        return view('purchase_orders/index', ['purchases' => $purchases]);
     }
 
     /**
@@ -35,7 +36,7 @@ class PurchaseOrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'provider_id' => 'required|integer',
+            'provider_id' => 'required|integer|min:1',
             "purchase_order_details"    => "required|array|min:1",
             "purchase_order_details.*"  => "integer|min:1"
         ]);

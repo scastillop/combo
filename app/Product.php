@@ -31,4 +31,15 @@ class Product extends Model
         $this->code = (string)sprintf("%04d", $this->family_id).(string)sprintf("%04d", $this->id).substr($this->name, 0, 5);
         $this->save();
     }
+
+    public static function getByParam($param_key, $value){
+        if ($param_key=='name'){
+            $products = \DB::table('products')
+             ->where('name', 'LIKE' , '%'.$value."%")->get();
+             return $products;
+        }elseif ($param_key=='id') {
+            return Product::find($value);
+        }
+        
+    }
 }

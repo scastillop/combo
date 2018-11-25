@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\provider;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Validator;
+use Session;
+use Redirect;
 
 class ProviderController extends Controller
 {
@@ -14,7 +18,8 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        //
+        $providers = Provider::all();
+        return view('providers/index', ['providers' => $providers]);
     }
 
     /**
@@ -24,7 +29,7 @@ class ProviderController extends Controller
      */
     public function create()
     {
-        //
+        return view('providers.create');
     }
 
     /**
@@ -35,10 +40,21 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'business_name' => 'required|string',
-            'address' => 'required|string'
+        $validator = Validator::make($request->all(), [
+            'business_name' => 'required|string|max:255|unique:providers',
+            'address' => "required|string|max:255"
         ]);
+        if ($validator->fails()) {
+            return redirect('providers/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $provider = new Provider;
+        $provider->business_name = $request['business_name'];
+        $provider->address = $request['address'];
+        $provider->save();
+        Session::flash('success', 'Proveedor creado correctamente');
+        return Redirect::to('providers');
     }
 
     /**
@@ -58,9 +74,10 @@ class ProviderController extends Controller
      * @param  \App\provider  $provider
      * @return \Illuminate\Http\Response
      */
-    public function edit(provider $provider)
+    public function edit($id)
     {
-        //
+        $provider = Provider::find($id);
+        return view('providers/edit', ['provider' => $provider, 'id' => $id]);
     }
 
     /**
@@ -70,9 +87,23 @@ class ProviderController extends Controller
      * @param  \App\provider  $provider
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, provider $provider)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'business_name' => 'required|string|max:255|unique:providers',
+            'address' => "required|string|max:255"
+        ]);
+        if ($validator->fails()) {
+            return redirect('providers/'. $id .'/edit')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $provider = Provider::find($id);
+        $provider->business_name = $request['business_name'];
+        $provider->address = $request['address'];
+        $provider->save();
+        Session::flash('success', 'Proveedor modificado correctamente');
+        return Redirect::to('providers');
     }
 
     /**

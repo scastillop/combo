@@ -1,23 +1,42 @@
+@extends('app')
+@section('content')
 <div>
-	<h1>INDEX VENTAS</h1>
-	<table>
+	<h1>
+		VENTAS
+		<a class="btn btn-xs btn-success" href="{{ URL::to('sales/create') }}">Nueva Venta</a>
+	</h1>
+	<hr>
+	<div class="row">
+		<div class="col-md-5">
+			<label for="date_from">Fecha desde</label>
+			<input type="text" class="form-control datepicker" name="date_from" id="date_from"/>
+		</div>
+		<div class="col-md-5">
+			<label for="date_to">Fecha hasta</label>
+			<input type="text" class="form-control datepicker" name="date_to" id="date_to" />
+		</div>
+		<div class="col-md-2">
+			<button class="btn btn-xs btn-primary" id="search_by_date" onclick="search_by_date();">Buscar</button>
+		</div>
+	</div>
+	<br>
+	<table class="table table-responsive">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Cliente</th>
-				<th>monto</th>
+				<th scope="col">ID</th>
+				<th scope="col">Cliente</th>
+				<th scope="col">monto</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach ($sales as $sale)
 			<tr>
-				<td>{{$sale->id}}</td>
-				<td>{{$sale->customer_id}}</td>
+				<td scope="row">{{$sale->id}}</td>
+				<td>{{$sale->customer->name}}</td>
 				<td>${{$sale->total_amount}}</td>
 			</tr>
 			@endforeach
 		</tbody>
 	</table>
-	
-	<?php echo e($sales) ?>
 </div>
+@endsection

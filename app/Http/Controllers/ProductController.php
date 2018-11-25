@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Product;
+use App\Family;
+use Validator;
+use Session;
+use Redirect;
 
 class ProductController extends Controller
 {
@@ -13,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return view('products/index', ['products' => $products]);
     }
 
     /**
@@ -23,7 +30,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $families = Family::pluck('name', 'id');
+        return view('products.create', ['families' => $families]);
     }
 
     /**
@@ -34,17 +42,32 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'stock' => 'required|integer',
-            'available' => 'required|boolean',
-            'family_id' => 'required|integer',
-            Rule::exists('family')->where(function ($query) {
-                $query->where('id', $request->family_id);
-            }),
-            'name' => 'required|string',
-            'price' => 'required|numeric',
-            //validar que no puede existir el mismo nombre de un producto de la misma familia
+        $max_umbral = isset($request['stock']) ? (int)$request['stock']-1 : 0;
+        $validator = Validator::make($request->all(), [
+            'family_id' => 'required|integer|exists:families,id',
+            'name' => 'required|string|unique:products',
+            'price' => 'required|numeric|min:1',
+            'stock' => 'required|integer|min:1',
+            'umbral' => 'required_with:stock|integer|max:'.$max_umbral
         ]);
+        if ($validator->fails()) {
+            return redirect('products/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $product = new Product;
+        $product->name = $request['name'];
+        $product->stock = $request['stock'];
+        $product->family_id = $request['family_id'];
+        $product->description = $request['description'];
+        $product->price = $request['price'];
+        $product->umbral = $request['umbral'];
+        $product->available = true;
+        Product::saveProduct($product);
+        // redirect
+        Session::flash('success', 'Producto creado correctamente');
+        return Redirect::to('products');
     }
 
     /**
@@ -66,7 +89,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::find($id);
+        $families = Family::pluck('name', 'id');
+        return view('products/edit', ['product' => $product, 'id' => $id, 'families' => $families]);
     }
 
     /**
@@ -78,7 +103,33 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $max_umbral = isset($request['stock']) ? (int)$request['stock']-1 : 0;
+        $validator = Validator::make($request->all(), [
+            'family_id' => 'required|integer|exists:families,id',
+            'name' => 'required|string|unique:products,name,'.$id,
+            'price' => 'required|numeric|min:1',
+            'stock' => 'required|integer|min:1',
+            'available' => 'required|boolean',
+            'umbral' => 'required_with:stock|integer|max:'.$max_umbral
+        ]);
+        if ($validator->fails()) {
+            return redirect('products/'. $id .'/edit')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $product = Product::find($id);
+        $product->name = $request['name'];
+        $product->stock = $request['stock'];
+        $product->family_id = $request['family_id'];
+        $product->description = $request['description'];
+        $product->price = $request['price'];
+        $product->umbral = $request['umbral'];
+        $product->available = $request['available'];
+        $product->save();
+        // redirect
+        Session::flash('success', 'Producto creado correctamente');
+        return Redirect::to('products');
     }
 
     /**
@@ -90,5 +141,10 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        return Product::getByParam($request->search_by, $request->search);
     }
 }

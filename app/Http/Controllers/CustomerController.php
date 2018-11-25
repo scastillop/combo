@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Validator;
+use Session;
+use Redirect;
 
 class CustomerController extends Controller
 {
@@ -15,7 +18,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::all();
+        return view('customers/index', ['customers' => $customers]);
     }
 
     /**
@@ -25,7 +29,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -36,10 +40,21 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => "unique:customers,email,{$customerId}"
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => "required|string|max:50|unique:customers"
         ]);
+        if ($validator->fails()) {
+            return redirect('customers/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $customer = new Customer;
+        $customer->name = $request['name'];
+        $customer->email = $request['email'];
+        $customer->save();
+        Session::flash('success', 'Cliente creado correctamente');
+        return Redirect::to('customers');
     }
 
     /**
@@ -59,9 +74,10 @@ class CustomerController extends Controller
      * @param  \App\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit($id)
     {
-        //
+        $customer = Customer::find($id);
+        return view('customers/edit', ['customer' => $customer, 'id' => $id]);
     }
 
     /**
@@ -71,12 +87,23 @@ class CustomerController extends Controller
      * @param  \App\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => "unique:customers,email,{$customerId}"
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => "required|string|max:50|unique:customers,email,".$id,
         ]);
+        if ($validator->fails()) {
+            return redirect('customers/'. $id .'/edit')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $customer = Customer::find($id);
+        $customer->name = $request['name'];
+        $customer->email = $request['email'];
+        $customer->save();
+        Session::flash('success', 'Cliente modificado correctamente');
+        return Redirect::to('customers');
     }
 
     /**
