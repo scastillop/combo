@@ -9,6 +9,9 @@ use App\Family;
 use App\Promo;
 use App\Customer;
 use App\PaymentMethod;
+use Validator;
+use Session;
+use Redirect;
 
 class SaleController extends Controller
 {
@@ -85,12 +88,32 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        //falta validar que el stock no sea 0
+        $validator = Validator::make($request->all(), [
             'customer_id' => 'required|integer',
             'payment_method_id' => 'required|integer',
-            "products"    => "required|array|min:1",
-            "products.*"  => "integer|min:1"
+            "product_id"    => "required|array|min:1",
+            "product_id.*"  => "integer|min:1"
         ]);
+        if ($validator->fails()) {
+            return redirect('sales/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $productos = array();
+        foreach ($request->product_id as $key => $value) {
+            $producto = Product::find($value);
+            if ($producto){
+                array_push($productos, $producto);
+            }
+        }
+        $sale = new Sale();
+        $sale->customer_id = $request->customer_id;
+        $sale->payment_method_id = $request->payment_method_id;
+        $sale->saveSale($sale, $productos);
+
+        Session::flash('success', 'Venta creada correctamente');
+        return Redirect::to('sales');
     }
 
     /**

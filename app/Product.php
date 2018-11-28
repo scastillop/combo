@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Family;
 
 class Product extends Model
 {
@@ -35,11 +36,22 @@ class Product extends Model
     public static function getByParam($param_key, $value){
         if ($param_key=='name'){
             $products = \DB::table('products')
-             ->where('name', 'LIKE' , '%'.$value."%")->get();
+            ->where('stock', '>', 0)
+            ->where('name', 'LIKE' , '%'.$value."%")->get();
              return $products;
         }elseif ($param_key=='id') {
             return Product::find($value);
         }
         
+    }
+
+    public static function reduceStockByCode(string $product_code){
+        $product = Product::where('code', '=', $product_code)->first();
+        $product->stock = $product->stock - 1;
+        $product->save();
+    }
+
+    public function family(){
+      return $this->belongsTo('App\Family');
     }
 }

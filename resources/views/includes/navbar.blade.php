@@ -24,14 +24,11 @@
       <li class="nav-item">
         <a class="nav-link" href="{{url('providers')}}">Proveedores</a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Stock
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{url('products')}}">Productos</a>
-          <a class="dropdown-item" href="{{url('families')}}">Familias</a>
-        </div>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url('products')}}">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url('families')}}">Familias</a>
       </li>
     </ul>
   </div>

@@ -12,6 +12,7 @@
 				<th scope="col">ID</th>
 				<th scope="col">Nombre</th>
 				<th scope="col">Descripción</th>
+				<th scope="col">Stock disponible</th>
 				<th scope="col">Acciones</th>
 			</tr>
 		</thead>
@@ -21,6 +22,7 @@
 				<td scope="row">{{$family->id}}</td>
 				<td>{{$family->name}}</td>
 				<td>{{$family->description}}</td>
+				<td>{{$family::stock_available($family->id)}}</td>
 				<td>
 					<a class="btn btn-small btn-info" href="{{ URL::to('families/' . $family->id . '/edit') }}">Editar</a>
 				</td>

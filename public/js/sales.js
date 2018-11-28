@@ -1,5 +1,4 @@
 $( document ).ready(function() {
-$('.datepicker').datepicker();
 	$('#search').on('keyup',function(){
 	 
 		var value=$(this).val();
@@ -18,13 +17,14 @@ $('.datepicker').datepicker();
 	});
 });
 function addProduct(product_id){
+	var row_count = Math.floor((Math.random() * 100) + 1);
 	$.ajax({
 		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},		 
 		type : 'POST',		 
 		url : 'http://localhost:8000/products/search',		 
 		data:{search_by: 'id', search: product_id},		 
 		success:function(product){
-			$('#products_cart').append('<tr id="tr_'+product.id+'"><td>'+product.code+'</td><td>'+product.name+'</td><td>'+product.description+'</td><td>'+product.price+'</td><td><button type="button" class="btn btn-xs btn-danger" onclick="return deleteProduct('+product.id+')" >Eliminar</button></td></tr>');
+			$('#products_cart').append('<tr id="tr_'+product.id+'" data-number="'+row_count+'"><td><input name="product_id['+row_count+']" id="product_id_'+product.id+'" value="'+product.id+'" type="hidden" />'+product.code+'</td><td>'+product.name+'</td><td>'+product.description+'</td><td>'+product.price+'</td><td><button type="button" class="btn btn-xs btn-danger" onclick="return deleteProduct('+product.id+')" >Eliminar</button></td></tr>');
 		}
 	});
 }

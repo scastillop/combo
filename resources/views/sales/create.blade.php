@@ -14,9 +14,9 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Product Name</th>
-            <th>Description</th>
-            <th>Price</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
             <th></th>       
           </tr>
         </thead>
@@ -31,7 +31,7 @@
   <h2>Ingresar Venta</h2>
   <hr>
     {{ Html::ul($errors->all()) }}
-    <form method="post" action="{{ route('customers.store') }}">
+    <form method="post" action="{{ route('sales.store') }}">
     @csrf
         <div class="form-group">
           <label for="name">Cliente</label>

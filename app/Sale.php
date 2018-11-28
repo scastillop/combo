@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\SaleDetail;
 use App\Customer;
+use App\Product;
 use Carbon\Carbon;
 
 class Sale extends Model
@@ -12,19 +13,23 @@ class Sale extends Model
     protected $table = 'sales';
 
     public static function saveSale(Sale $sale, array $products){
-      $sale->save();
       $total_amount=0;
+      $details = array();
       foreach ($products as $product) {
           $sale_detail = new SaleDetail();
-          $sale_detail->sale_id = $sale->id;
           $sale_detail->product_code = $product->code;
           $sale_detail->product_detail = $product->name;
           $sale_detail->price = $product->price;
-          $sale_detail->save();
+          array_push($details, $sale_detail);
           $total_amount+=$product->price;
       }
       $sale->total_amount=$total_amount;
       $sale->save();
+      foreach ($details as $detail) {
+        $detail->sale_id = $sale->id;
+        $detail->save();
+        Product::reduceStockByCode($detail->product_code);
+      }
     }
 
     public function customer(){

@@ -24,7 +24,7 @@
 			@foreach ($products as $product)
 			<tr>
 				<td scope="row">{{$product->code}}</td>
-				<td></td>
+				<td>{{$product->family->name}}</td>
 				<td>{{$product->name}}</td>
 				<td>{{$product->description}}</td>
 				<td>${{$product->price}}</td>
