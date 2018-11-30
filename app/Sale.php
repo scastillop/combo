@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\SaleDetail;
 use App\Customer;
 use App\Product;
+use App\PaymentMethod;
 use Carbon\Carbon;
 
 class Sale extends Model
@@ -45,5 +46,13 @@ class Sale extends Model
         $sales = Sale::whereBetween('created_at', [$date_from, $date_to])->get();
       }
       return $sales;
+    }
+
+    public function payment_method(){
+      return $this->belongsTo('App\PaymentMethod');
+    }
+
+    public function sale_details(){
+      return $this->hasMany('App\SaleDetail');
     }
 }

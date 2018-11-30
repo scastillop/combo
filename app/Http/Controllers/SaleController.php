@@ -88,25 +88,39 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //falta validar que el stock no sea 0
+        $productos = array();
+        $product_ids = array();
+        foreach ($request->product_id as $key => $value) {
+            $product = Product::find($value);
+            var_dump($value);
+            if ($product){
+                array_push($productos, $product);
+                array_push($product_ids, $product->id);
+            }
+        }
+        
+        $total_products_ids = array_count_values($product_ids);
         $validator = Validator::make($request->all(), [
             'customer_id' => 'required|integer',
             'payment_method_id' => 'required|integer',
+            //"products"    => "required|array|min:1",
+            //"products.*"  => "integer|min:1"
             "product_id"    => "required|array|min:1",
             "product_id.*"  => "integer|min:1"
         ]);
+        foreach ($total_products_ids as $key => $value) {
+            if (!Product::hasStock($key, $value)){
+                 $validator->after(function ($validator) {
+                    $validator->errors()->add('product_id', 'No hay stock disponible');
+                 });
+            }
+        }
         if ($validator->fails()) {
             return redirect('sales/create')
                         ->withErrors($validator)
                         ->withInput();
         }
-        $productos = array();
-        foreach ($request->product_id as $key => $value) {
-            $producto = Product::find($value);
-            if ($producto){
-                array_push($productos, $producto);
-            }
-        }
+
         $sale = new Sale();
         $sale->customer_id = $request->customer_id;
         $sale->payment_method_id = $request->payment_method_id;
@@ -122,9 +136,10 @@ class SaleController extends Controller
      * @param  \App\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function show(Sale $sale)
+    public function show($sale_id)
     {
-        //
+        $sale = Sale::find($sale_id);
+        return view('sales/show', ['sale' => $sale]);
     }
 
     /**

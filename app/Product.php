@@ -10,10 +10,10 @@ class Product extends Model
     protected $table = 'products';
 
     // funcion para preguntar si un producto tiene stock disponible
-    public static function hasStock($product_id){
+    public static function hasStock($product_id, $quantity){
      	$has_stock = true;
 		$product = \DB::table('products')->where('id', $product_id)->first();
-		if($product->stock < 1){
+		if($product->stock < $quantity){
 			$has_stock = false;
 		}
 		return $has_stock;

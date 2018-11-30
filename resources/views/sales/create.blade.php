@@ -13,10 +13,11 @@
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Código Producto</th>
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Precio</th>
+            <th>Stock Disponible</th>
             <th></th>       
           </tr>
         </thead>
@@ -41,10 +42,27 @@
           <label for="name">Método de Pago</label>
           {!! Form::select('payment_method_id', $payment_methods, null, array('class' => 'form-control') ) !!}
         </div>
+        <hr>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Cantidad de Productos</th>
+              <th>Precio Total</th>   
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="q_products"></td>
+              <td id="total_price"></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <input name="products" id="products" value="" type="hidden" />
         <table class="table table-bordered table-hover">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Código Producto</th>
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Precio</th>

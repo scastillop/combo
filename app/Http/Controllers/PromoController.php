@@ -14,8 +14,10 @@ class PromoController extends Controller
      */
     public function index()
     {
-        $promos = Promo::getMostSelledProducts("2018-10-01 00:00:00", "2018-11-31 00:00:00");
-        return view('promos/index', ['promos' => $promos]);
+        //$promos = Promo::getMostSelledProducts("2018-10-01 00:00:00", "2018-11-31 00:00:00");
+        $promos = Promo::all();
+        $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct("2018-10-01 00:00:00", "2018-11-31 00:00:00");
+        return view('promos/index', ['promos' => $promos, 'most_and_least_sold_products' => $most_and_least_sold_products]);
     }
 
     /**
@@ -23,9 +25,14 @@ class PromoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        if ($request->get('promo_type')){
+            $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct("2018-10-01 00:00:00", "2018-11-31 00:00:00");
+            return view('promos/create', ['most_and_least_sold_products' => $most_and_least_sold_products]);
+        }else{
+
+        }
     }
 
     /**

@@ -25,7 +25,9 @@
 			<tr>
 				<th scope="col">ID</th>
 				<th scope="col">Cliente</th>
-				<th scope="col">monto</th>
+				<th scope="col">Precio Total</th>
+				<th scope="col">Fecha de venta</th>
+				<th scope="col"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,6 +36,8 @@
 				<td scope="row">{{$sale->id}}</td>
 				<td>{{$sale->customer->name}}</td>
 				<td>${{$sale->total_amount}}</td>
+				<td>{{$sale->created_at}}</td>
+				<td><a class="btn btn-xs btn-primary" href="{{ URL::to('sales/' . $sale->id) }}">Ver detalle</a></td>
 			</tr>
 			@endforeach
 		</tbody>
