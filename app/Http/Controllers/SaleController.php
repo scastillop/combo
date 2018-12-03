@@ -92,7 +92,6 @@ class SaleController extends Controller
         $product_ids = array();
         foreach ($request->product_id as $key => $value) {
             $product = Product::find($value);
-            var_dump($value);
             if ($product){
                 array_push($productos, $product);
                 array_push($product_ids, $product->id);

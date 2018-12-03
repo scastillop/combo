@@ -49,6 +49,11 @@ class Promo extends Model
 	//objeto Promo
 	//array Productos
 	public static function savePromo(Promo $promo, array $products){
+		$total_price = 0;
+		$products->map(function ($product){
+			$total_price += $product->price;
+		});
+		$promo->total_price = $total_price;
 		$promo->save();
 		foreach ($products as $product) {
 		    $promo_detail = new PromoDetail;
