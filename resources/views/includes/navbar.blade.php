@@ -31,5 +31,26 @@
         <a class="nav-link" href="{{url('families')}}">Familias</a>
       </li>
     </ul>
+    <ul class="navbar-nav ml-auto">
+      <!-- Authentication Links -->
+      <li class="nav-item dropdown">
+          <table>
+          <tr>
+            <td>{{ Auth::user()->name }}</td>
+            <td>
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                 onclick="event.preventDefault();
+                               document.getElementById('logout-form').submit();">
+                  ({{ __('Logout') }})
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+            </td>
+          </tr>
+          </table>
+      </li>
+    </ul>
+    </div>
   </div>
 </nav>
