@@ -9,15 +9,18 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
       </li>
+      @if (Auth::user()->is_admin)
       <li class="nav-item">
         <a class="nav-link" href="{{url('promos')}}">Combos</a>
       </li>
+      @endif
       <li class="nav-item">
         <a class="nav-link" href="{{url('sales')}}">Ventas</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{url('customers')}}">Clientes</a>
       </li>
+      @if (Auth::user()->is_admin)
       <li class="nav-item">
         <a class="nav-link" href="{{url('purchase_orders')}}">Órdenes de compra</a>
       </li>
@@ -30,6 +33,7 @@
       <li class="nav-item">
         <a class="nav-link" href="{{url('families')}}">Familias</a>
       </li>
+      @endif
     </ul>
     <ul class="navbar-nav ml-auto">
       <!-- Authentication Links -->

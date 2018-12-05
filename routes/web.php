@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::group(['middleware' => ['auth']], function() {
 	Route::get('/', function () {
     return view('app');
@@ -20,8 +19,9 @@ Route::group(['middleware' => ['auth']], function() {
 	    return view('app');
 	});
 	Route::resource('sales', 'SaleController');
-	Route::resource('promos', 'PromoController');
 	Route::resource('customers', 'CustomerController');
+	Route::resource('promos', 'PromoController');
+	
 	Route::resource('families', 'FamilyController');
 	Route::resource('products', 'ProductController');
 	Route::resource('providers', 'ProviderController');
