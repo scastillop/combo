@@ -12,6 +12,7 @@ use App\PaymentMethod;
 use Validator;
 use Session;
 use Redirect;
+use Auth;
 
 class SaleController extends Controller
 {
@@ -124,7 +125,7 @@ class SaleController extends Controller
         $sale->customer_id = $request->customer_id;
         $sale->payment_method_id = $request->payment_method_id;
         $sale->saveSale($sale, $productos);
-
+        $sale->user_id = Auth::id();
         Session::flash('success', 'Venta creada correctamente');
         return Redirect::to('sales');
     }
