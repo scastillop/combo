@@ -45,9 +45,9 @@ class Product extends Model
         
     }
 
-    public static function reduceStockByCode(string $product_code){
+    public static function reduceStockByCode(string $product_code, $quantity = 1){
         $product = Product::where('code', '=', $product_code)->first();
-        $product->stock = $product->stock - 1;
+        $product->stock = $product->stock - $quantity;
         $product->save();
     }
 

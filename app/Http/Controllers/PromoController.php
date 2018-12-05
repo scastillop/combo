@@ -59,7 +59,7 @@ class PromoController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'total_discount' => 'required|numeric|min:1',
+            'total_discount' => 'required|numeric|min:1|max:99',
             'stock' => 'required|numeric|min:1',
             'init_date' => 'date_format:Y-m-d|required|after:today',
             'end_date' => 'date_format:Y-m-d|required|after:init_date',
