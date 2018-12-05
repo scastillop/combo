@@ -27,8 +27,8 @@ class AddProductDataToPurchaseOrderDetails extends Migration
     public function down()
     {
         Schema::table('purchase_order_details', function($table) {
-            $table->integer('product_id');
-            $table->string('product_code');
+            $table->dropColumn('product_id');
+            $table->dropColumn('product_code');
         });
     }
 }

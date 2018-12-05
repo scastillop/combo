@@ -16,12 +16,12 @@ class PromoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //$promos = Promo::getMostSelledProducts("2018-10-01 00:00:00", "2018-11-31 00:00:00");
         $promos = Promo::all();
-        $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct("2018-10-01 00:00:00", "2018-11-31 00:00:00");
-        return view('promos/index', ['promos' => $promos, 'most_and_least_sold_products' => $most_and_least_sold_products]);
+        $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct($request->date_from, $request->date_to);
+        return view('promos/index', ['promos' => $promos, 'most_and_least_sold_products' => $most_and_least_sold_products, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
     }
 
     /**
@@ -34,13 +34,15 @@ class PromoController extends Controller
         $total_price = 0;
         $promo_type = $request->get('promo_type');
         if ($promo_type == 'most_and_least_sold_products'){
-            $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct("2018-10-01 00:00:00", "2018-11-31 00:00:00");
-            $total_price = number_format($most_and_least_sold_products[0]["least"]->price+$most_and_least_sold_products[1]["most"]->price, 0, '', '.');
-            return view('promos/create', ['most_and_least_sold_products' => $most_and_least_sold_products, 'total_price'=>$total_price, 'promo_type'=>$promo_type]);
+            $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct($request->date_from, $request->date_to);
+            $total_price = isset($most_and_least_sold_products[0]) ? $total_price+$most_and_least_sold_products[0]["least"]->price : $total_price;
+            $total_price = isset($most_and_least_sold_products[1]) ? $total_price+$most_and_least_sold_products[1]["most"]->price : $total_price;
+            $total_price = number_format($total_price, 0, '', '.');
+            return view('promos/create', ['most_and_least_sold_products' => $most_and_least_sold_products, 'total_price'=>$total_price, 'promo_type'=>$promo_type, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
         }else{
             $promos = Promo::all();
-            $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct("2018-10-01 00:00:00", "2018-11-31 00:00:00");
-            return view('promos/index', ['promos' => $promos, 'most_and_least_sold_products' => $most_and_least_sold_products, 'promo_type'=>$promo_type]);
+            $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct($request->date_from, $request->date_to);
+            return view('promos/index', ['promos' => $promos, 'most_and_least_sold_products' => $most_and_least_sold_products, 'promo_type'=>$promo_type, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
         }
     }
 
@@ -52,11 +54,14 @@ class PromoController extends Controller
      */
     public function store(Request $request)
     {
-        $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct("2018-10-01 00:00:00", "2018-11-31 00:00:00");
+        $most_and_least_sold_products = Promo::getMostAndLeastSoldProduct($request->date_from, $request->date_to);
         $products = array();
-        array_push($products, $most_and_least_sold_products[0]["least"]);
-        array_push($products, $most_and_least_sold_products[1]["most"]);
-
+        if(isset($most_and_least_sold_products[0])){
+            array_push($products, $most_and_least_sold_products[0]["least"]);
+        }
+        if(isset($most_and_least_sold_products[1])){
+            array_push($products, $most_and_least_sold_products[1]["most"]);
+        }
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'total_discount' => 'required|numeric|min:1|max:99',
@@ -64,6 +69,11 @@ class PromoController extends Controller
             'init_date' => 'date_format:Y-m-d|required|after:today',
             'end_date' => 'date_format:Y-m-d|required|after:init_date',
         ]);
+        if(empty($products)){
+             $validator->after(function ($validator) {
+                    $validator->errors()->add('stock', 'Debe ingresar productos al combo');
+                 });
+        }
         foreach ($products as $value) {
             if (!Product::hasStock($value->id, $request->stock)){
                  $validator->after(function ($validator) {
@@ -72,7 +82,7 @@ class PromoController extends Controller
             }
         }
         if ($validator->fails()) {
-            return redirect('promos/create?promo_type='.$request['promo_type'])
+            return redirect('promos/create?promo_type='.$request['promo_type'].'&date_from='. $request['date_from'] .'&date_to='.$request['date_to'])
                         ->withErrors($validator)
                         ->withInput();
         }

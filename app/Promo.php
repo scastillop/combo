@@ -22,11 +22,12 @@ class Promo extends Model
 		return $response;
 	}
 
-	public static function getMostAndLeastSoldProduct(string $date_from, string $date_to){
+	public static function getMostAndLeastSoldProduct($date_from, $date_to){
+
 		$response = array();
 		$less_selled_product = \DB::table('products')
 								->leftJoin('sale_details', 'sale_details.product_code', '=', 'products.code')
-								//->whereBetween('sale_details.created_at', array($date_from, $date_to))
+								->whereBetween('sale_details.created_at', array($date_from, $date_to))
 								->select(\DB::raw('count(`sale_details`.`product_code`) as total_sold, `products`.`code`'))
 								->groupBy('products.code')
 								->orderBy('total_sold', 'asc')
@@ -34,14 +35,18 @@ class Promo extends Model
 								->first();
 		$most_selled_product = \DB::table('products')
 								->leftJoin('sale_details', 'sale_details.product_code', '=', 'products.code')
-								//->whereBetween('sale_details.created_at', array($date_from, $date_to))
+								->whereBetween('sale_details.created_at', array($date_from, $date_to))
 								->select(\DB::raw('count(`sale_details`.`product_code`) as total_sold, `products`.`code`'))
 								->groupBy('products.code')
 								->orderBy('total_sold', 'desc')
 								->limit(1)
 								->first();
-		array_push($response, ['least'=>Product::where('code','=',$less_selled_product->code)->first(), 'total_sold'=>$less_selled_product->total_sold]);
+		if(isset($less_selled_product)){
+			array_push($response, ['least'=>Product::where('code','=',$less_selled_product->code)->first(), 'total_sold'=>$less_selled_product->total_sold]);
+		}
+		if(isset($most_selled_product)){
 		array_push($response, ['most'=>Product::where('code','=',$most_selled_product->code)->first(), 'total_sold'=>$most_selled_product->total_sold]);
+		}
 		return $response;
 	}
 

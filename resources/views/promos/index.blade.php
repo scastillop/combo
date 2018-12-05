@@ -6,6 +6,20 @@
 	<br>
 	<div>
 		<h2>Producto menos vendido + Producto más vendido</h2>
+		<div class="row">
+			<div class="col-md-5">
+				<label for="date_from">Fecha desde</label>
+				<input type="text" class="form-control datepicker" name="date_from" id="date_from" value="{{$date_from}}" />
+			</div>
+			<div class="col-md-5">
+				<label for="date_to">Fecha hasta</label>
+				<input type="text" class="form-control datepicker" name="date_to" id="date_to" value="{{$date_to}}" />
+			</div>
+			<div class="col-md-2">
+				<button class="btn btn-xs btn-primary" id="search_by_date" onclick="search_by_date();">Buscar</button>
+			</div>
+		</div>
+		<br>
 		<table class="table table-responsive">
 			<thead>
 				<tr>
@@ -19,7 +33,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				
+				<?php if(isset($most_and_least_sold_products[0])){ ?>
 				<tr>
 					<td scope="row"><b>Producto Menos Vendido</b></td>
 					<td >{{$most_and_least_sold_products[0]["least"]->code}}</td>
@@ -29,6 +43,8 @@
 					<td>${{$most_and_least_sold_products[0]["least"]->price}}</td>
 					<td>{{$most_and_least_sold_products[0]["total_sold"]}}</td>
 				</tr>
+				<?php } ?>
+				<?php if(isset($most_and_least_sold_products[1])){ ?>
 				<tr>
 					<td scope="row"><b>Producto Más Vendido</b></td>
 					<td>{{$most_and_least_sold_products[1]["most"]->code}}</td>
@@ -37,10 +53,11 @@
 					<td>{{$most_and_least_sold_products[1]["most"]->stock}}</td>
 					<td>${{$most_and_least_sold_products[1]["most"]->price}}</td>
 					<td>{{$most_and_least_sold_products[1]["total_sold"]}}</td>
-				</tr>		
+				</tr>	
+				<?php } ?>	
 			</tbody>
 		</table>
-		<a class="btn btn-xs btn-success" href="{{ URL::to('promos/create?promo_type=most_and_least_sold_products') }}">Generar Combo</a>
+		<a class="btn btn-xs btn-success" href="{{ URL::to('promos/create?promo_type=most_and_least_sold_products&date_from='. $date_from .'&date_to='.$date_to.'') }}">Generar Combo</a>
 	</div>
 	<br>
 	<hr>

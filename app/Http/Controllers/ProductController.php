@@ -46,8 +46,9 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'family_id' => 'required|integer|exists:families,id',
             'name' => 'required|string|unique:products',
-            'price' => 'required|numeric|min:1',
+            'price' => 'required|numeric|min:1|max:10000000',
             'stock' => 'required|integer|min:1',
+            'init_stock' => 'required|integer|min:1',
             'umbral' => 'required_with:stock|integer|max:'.$max_umbral
         ]);
         if ($validator->fails()) {
@@ -59,6 +60,7 @@ class ProductController extends Controller
         $product = new Product;
         $product->name = $request['name'];
         $product->stock = $request['stock'];
+        $product->init_stock = $request['init_stock'];
         $product->family_id = $request['family_id'];
         $product->description = $request['description'];
         $product->price = $request['price'];
@@ -107,8 +109,9 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'family_id' => 'required|integer|exists:families,id',
             'name' => 'required|string|unique:products,name,'.$id,
-            'price' => 'required|numeric|min:1',
+            'price' => 'required|numeric|min:1|max:10000000',
             'stock' => 'required|integer|min:1',
+            'init_stock' => 'required|integer|min:1',
             'available' => 'required|boolean',
             'umbral' => 'required_with:stock|integer|max:'.$max_umbral
         ]);
@@ -121,6 +124,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->name = $request['name'];
         $product->stock = $request['stock'];
+        $product->init_stock = $request['init_stock'];
         $product->family_id = $request['family_id'];
         $product->description = $request['description'];
         $product->price = $request['price'];

@@ -37,7 +37,7 @@ function deleteProduct(product_id){
 function search_by_date(){
 	var date_from = $('#date_from').val();
 	var date_to = $('#date_to').val();
-	location.href = window.location+'/sales?date_from='+date_from+'&date_to='+date_to;
+	location.href = window.location+'?date_from='+date_from+'&date_to='+date_to;
 }
 function calculateTotals(){
 	var total_products = $('#products_cart tr').length;

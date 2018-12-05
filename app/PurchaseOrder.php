@@ -38,4 +38,8 @@ class PurchaseOrder extends Model
         }
         return true;
     }
+
+    public function provider(){
+      return $this->belongsTo('App\Provider');
+    }
 }

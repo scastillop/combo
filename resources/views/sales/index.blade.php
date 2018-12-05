@@ -24,6 +24,7 @@
 		<thead>
 			<tr>
 				<th scope="col">ID</th>
+				<th scope="col">Vendedor</th>
 				<th scope="col">Cliente</th>
 				<th scope="col">Precio Total</th>
 				<th scope="col">Fecha de venta</th>
@@ -34,6 +35,7 @@
 			@foreach ($sales as $sale)
 			<tr>
 				<td scope="row">{{$sale->id}}</td>
+				<td>{{$sale->user->name}}</td>
 				<td>{{$sale->customer->name}}</td>
 				<td>${{$sale->total_amount}}</td>
 				<td>{{$sale->created_at}}</td>

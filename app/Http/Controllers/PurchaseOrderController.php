@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\PurchaseOrder;
+use App\PurchaseOrderDetail;
+use Validator;
+use Session;
+use Redirect;
 
 class PurchaseOrderController extends Controller
 {
@@ -13,7 +18,7 @@ class PurchaseOrderController extends Controller
      */
     public function index()
     {
-        $purchases = [];
+        $purchases = PurchaseOrder::all();
         return view('purchase_orders/index', ['purchases' => $purchases]);
     }
 
@@ -50,7 +55,10 @@ class PurchaseOrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $purchase = PurchaseOrder::find($id);
+        $purchase_detail = PurchaseOrderDetail::where('purchase_order_id', '=', $id)->first();
+        
+        return view('purchase_orders/show', ['purchase' => $purchase, 'purchase_detail' => $purchase_detail]);
     }
 
     /**
@@ -61,7 +69,10 @@ class PurchaseOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $purchase = PurchaseOrder::find($id);
+        $purchase_detail = PurchaseOrderDetail::where('purchase_order_id', '=', $id)->first();
+        $statuses = ['pending' => 'Pendiente', 'rejected' => 'Rechazada', 'done' => 'Hecha'];
+        return view('purchase_orders/edit', ['purchase' => $purchase, 'purchase_detail' => $purchase_detail, 'statuses' => $statuses]);
     }
 
     /**
@@ -73,7 +84,24 @@ class PurchaseOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('purchase_orders/'. $id .'/edit')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        // store
+        $purchase_order              = PurchaseOrder::find($id);
+        $purchase_order->status        = $request['status'];
+        $purchase_order->save();
+
+        // redirect
+        Session::flash('success', 'Orden modificada correctamente');
+        return Redirect::to('purchase_orders');
     }
 
     /**

@@ -26,8 +26,12 @@
     </div>
     <div class="form-group">
       <label for="name">Stock</label>
-      <input type="number" class="form-control" name="stock" value="{{$product->stock}}" placeholder="Ingrese Stock">    
+      <input type="number" class="form-control" name="stock" value="{{$product->stock}}" placeholder="Ingrese Stock">  
     </div>
+     <div class="form-group">
+          <label for="name">Stock Inicial</label>
+          <input type="number" class="form-control" name="init_stock" value="{{$product->init_stock}}" placeholder="Ingrese Stock Inicial (útil para generar ordenes de compra)">    
+        </div>
     <div class="form-group">
       <label for="name">Precio</label>
       <input type="number" class="form-control" name="price" value="{{$product->price}}" placeholder="Ingrese Precio">    

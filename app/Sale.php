@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\SaleDetail;
 use App\Customer;
+use App\User;
 use App\Product;
 use App\PaymentMethod;
 use Carbon\Carbon;
@@ -35,6 +36,10 @@ class Sale extends Model
 
     public function customer(){
       return $this->belongsTo('App\Customer');
+    }
+
+    public function user(){
+      return $this->belongsTo('App\User');
     }
 
     public static function getByDate($date_from, $date_to){

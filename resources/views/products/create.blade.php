@@ -28,6 +28,10 @@
           <input type="number" class="form-control" name="stock" value="" placeholder="Ingrese Stock">    
         </div>
         <div class="form-group">
+          <label for="name">Stock Inicial</label>
+          <input type="number" class="form-control" name="init_stock" value="" placeholder="Ingrese Stock Inicial (útil para generar ordenes de compra)">    
+        </div>
+        <div class="form-group">
           <label for="name">Precio</label>
           <input type="number" class="form-control" name="price" value="" placeholder="Ingrese Precio">    
         </div>

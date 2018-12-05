@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        
+        <?php if(isset($most_and_least_sold_products[0])){ ?>
         <tr>
           <td scope="row"><b>Producto Menos Vendido</b></td>
           <td >{{$most_and_least_sold_products[0]["least"]->code}}</td>
@@ -28,6 +28,8 @@
           <td>${{number_format($most_and_least_sold_products[0]["least"]->price, 0, '', '.')}}</td>
           <td>{{$most_and_least_sold_products[0]["total_sold"]}}</td>
         </tr>
+        <?php } ?>
+        <?php if(isset($most_and_least_sold_products[1])){ ?>
         <tr>
           <td scope="row"><b>Producto Más Vendido</b></td>
           <td>{{$most_and_least_sold_products[1]["most"]->code}}</td>
@@ -37,6 +39,7 @@
           <td>${{number_format($most_and_least_sold_products[1]["most"]->price, 0, '', '.')}}</td>
           <td>{{$most_and_least_sold_products[1]["total_sold"]}}</td>
         </tr>   
+        <?php } ?>  
       </tbody>
     </table>
   </div>
@@ -50,6 +53,12 @@
 @csrf
         <div class="form-group">
           <input type="hidden"class="form-control" name="promo_type" value="{{$promo_type}}"/>
+        </div>
+        <div class="form-group">
+          <input type="hidden"class="form-control" name="date_from" value="{{$date_from}}"/>
+        </div>
+        <div class="form-group">
+          <input type="hidden"class="form-control" name="date_to" value="{{$date_to}}"/>
         </div>
         <div class="form-group">
           <label for="name">Título</label>
