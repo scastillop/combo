@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Family;
+use App\PurchaseOrder;
 
 class Product extends Model
 {
@@ -49,6 +50,9 @@ class Product extends Model
         $product = Product::where('code', '=', $product_code)->first();
         $product->stock = $product->stock - $quantity;
         $product->save();
+        if($product->stock <= $product->umbral){
+            PurchaseOrder::generateOrderByUmbral($product);
+        }
     }
 
     public function family(){
