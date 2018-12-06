@@ -9,11 +9,11 @@
 	<div class="row">
 		<div class="col-md-5">
 			<label for="date_from">Fecha desde</label>
-			<input type="text" class="form-control datepicker" name="date_from" id="date_from"/>
+			<input type="text" class="form-control datepicker" name="date_from" id="date_from" value="{{$date_from}}"/>
 		</div>
 		<div class="col-md-5">
 			<label for="date_to">Fecha hasta</label>
-			<input type="text" class="form-control datepicker" name="date_to" id="date_to" />
+			<input type="text" class="form-control datepicker" name="date_to" id="date_to" value="{{$date_to}}" />
 		</div>
 		<div class="col-md-2">
 			<button class="btn btn-xs btn-primary" id="search_by_date" onclick="search_by_date();">Buscar</button>

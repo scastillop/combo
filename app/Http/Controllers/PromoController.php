@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Promo;
 use App\Product;
+use App\PromoDetail;
 use Validator;
 use Session;
 use Redirect;
@@ -114,8 +115,10 @@ class PromoController extends Controller
      */
     public function show($id)
     {
-        echo "promos-show";
-        echo url()->current();
+        $promo = Promo::find($id);
+        $promo_details = PromoDetail::where('promo_id', '=', $id)->get();
+        
+        return view('promos/show', ['promo' => $promo, 'promo_details' => $promo_details]);
     }
 
     /**

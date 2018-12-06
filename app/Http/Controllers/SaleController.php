@@ -25,7 +25,7 @@ class SaleController extends Controller
     {
         $sales = Sale::getByDate($request->date_from, $request->date_to);
         
-        return view('sales/index', ['sales' => $sales]);
+        return view('sales/index', ['sales' => $sales, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
     }
 
     /**
@@ -83,8 +83,8 @@ class SaleController extends Controller
         $sale = new Sale();
         $sale->customer_id = $request->customer_id;
         $sale->payment_method_id = $request->payment_method_id;
-        $sale->saveSale($sale, $productos);
         $sale->user_id = Auth::id();
+        $sale->saveSale($sale, $productos);
         Session::flash('success', 'Venta creada correctamente');
         return Redirect::to('sales');
     }

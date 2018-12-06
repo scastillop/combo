@@ -44,11 +44,11 @@ class Sale extends Model
 
     public static function getByDate($date_from, $date_to){
       if ($date_from == '' && $date_to == ''){
-        $sales = Sale::all();
+        $sales = Sale::orderBy('id','DESC')->get();
       } else {
         $date_from = $date_from == '' ? Carbon::now() : $date_from;
         $date_to = $date_to == '' ? Carbon::now() : $date_to;
-        $sales = Sale::whereBetween('created_at', [$date_from, $date_to])->get();
+        $sales = Sale::whereBetween('created_at', [$date_from, $date_to])->orderBy('id','DESC')->get();
       }
       return $sales;
     }

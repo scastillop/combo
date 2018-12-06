@@ -16,7 +16,7 @@
 				<input type="text" class="form-control datepicker" name="date_to" id="date_to" value="{{$date_to}}" />
 			</div>
 			<div class="col-md-2">
-				<button class="btn btn-xs btn-primary" id="search_by_date" onclick="search_by_date();">Buscar</button>
+				<button class="btn btn-xs btn-primary" id="search_by_date" onclick="search_promo_by_date();">Buscar</button>
 			</div>
 		</div>
 		<br>
