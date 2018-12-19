@@ -14,3 +14,4 @@ yarn-error.log
 .phpunit.result.cache
 *.DS_Store
 /resources/views/purchase_orders/edit.blade.php
+/resources/views/purchase_orders/index.blade.php
